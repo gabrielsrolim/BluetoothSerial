@@ -49,7 +49,7 @@ public class BluetoothSerialService {
     private ConnectThread mConnectThread;
     private ConnectedThread mConnectedThread;
     private int mState;
-    private bool mIsDisableBluetooth;
+    private boolean mIsDisableBluetooth;
 
     // Constants that indicate the current connection state
     public static final int STATE_NONE = 0;       // we're doing nothing
