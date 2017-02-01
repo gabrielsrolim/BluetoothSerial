@@ -128,6 +128,24 @@ public class BluetoothSerialService {
         // Cancel any thread currently running a connection
         if (mConnectedThread != null) {mConnectedThread.cancel(); mConnectedThread = null;}
 
+        if(mAdapter.isEnabled()){
+            //Turn Off Bluetooth
+            bluetoothAdapter.disable();
+
+            //Wait turn Off Bluetooth
+            while(mAdapter.isEnabled()){
+                Thread.sleep(10)
+            }
+
+            //Turn On Bluetooth
+            bluetoothAdapter.enable();
+
+            //Wait turn On Bluetooth
+            while(!mAdapter.isEnabled()){
+                Thread.sleep(10)
+            }
+        }
+
         // Start the thread to connect with the given device
         mConnectThread = new ConnectThread(device, secure);
         mConnectThread.start();
