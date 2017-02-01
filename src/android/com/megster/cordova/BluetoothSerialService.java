@@ -49,6 +49,7 @@ public class BluetoothSerialService {
     private ConnectThread mConnectThread;
     private ConnectedThread mConnectedThread;
     private int mState;
+    private bool mIsDisableBluetooth;
 
     // Constants that indicate the current connection state
     public static final int STATE_NONE = 0;       // we're doing nothing
@@ -64,6 +65,7 @@ public class BluetoothSerialService {
         mAdapter = BluetoothAdapter.getDefaultAdapter();
         mState = STATE_NONE;
         mHandler = handler;
+        mIsDisableBluetooth = false;
     }
 
     /**
@@ -127,22 +129,61 @@ public class BluetoothSerialService {
 
         // Cancel any thread currently running a connection
         if (mConnectedThread != null) {mConnectedThread.cancel(); mConnectedThread = null;}
-
-        if(mAdapter.isEnabled()){
+        if (mConnectThread != null){
+            Log.i(TAG,"mConnectThread is null");
+        }
+        if(mAdapter.isEnabled() && mIsDisableBluetooth){
+            int qtdLoop = 0;
+            mIsDisableBluetooth = false;
             //Turn Off Bluetooth
             mAdapter.disable();
 
             //Wait turn Off Bluetooth
             while(mAdapter.isEnabled()){
-                Thread.sleep(10);
+                Log.i(TAG,"Wait turn Off Bluetooth");
+                try
+                {
+                    Thread.sleep(10);
+                    mAdapter.disable();
+                }
+                catch(InterruptedException e)
+                {
+                     // this part is executed when an exception (in this example InterruptedException) occurs
+                }
+            }
+
+            qtdLoop = 0;
+
+            while(qtdLoop < 5){
+                Log.i(TAG,"Wait 5 seconds");
+                try
+                {
+                    Thread.sleep(1000);
+                    mAdapter.disable();
+                    qtdLoop++;
+                }
+                catch(InterruptedException e)
+                {
+                     // this part is executed when an exception (in this example InterruptedException) occurs
+                }
             }
 
             //Turn On Bluetooth
             mAdapter.enable();
 
+            Log.i(TAG,"Enable!");
             //Wait turn On Bluetooth
             while(!mAdapter.isEnabled()){
-                Thread.sleep(10);
+                Log.i(TAG,"Wait Enable!");
+                try
+                {
+                    Thread.sleep(10);
+                    mAdapter.enable();
+                }
+                catch(InterruptedException e)
+                {
+                     // this part is executed when an exception (in this example InterruptedException) occurs
+                }
             }
         }
 
@@ -245,6 +286,7 @@ public class BluetoothSerialService {
         bundle.putString(BluetoothSerial.TOAST, "Unable to connect to device");
         msg.setData(bundle);
         mHandler.sendMessage(msg);
+        mIsDisableBluetooth = true;
 
         // Start the service over to restart listening mode
         BluetoothSerialService.this.start();
