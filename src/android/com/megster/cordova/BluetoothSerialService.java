@@ -134,7 +134,7 @@ public class BluetoothSerialService {
 
             //Wait turn Off Bluetooth
             while(mAdapter.isEnabled()){
-                Thread.sleep(10)
+                Thread.sleep(10);
             }
 
             //Turn On Bluetooth
@@ -142,7 +142,7 @@ public class BluetoothSerialService {
 
             //Wait turn On Bluetooth
             while(!mAdapter.isEnabled()){
-                Thread.sleep(10)
+                Thread.sleep(10);
             }
         }
 
