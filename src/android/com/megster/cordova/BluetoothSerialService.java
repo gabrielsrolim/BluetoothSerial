@@ -130,7 +130,7 @@ public class BluetoothSerialService {
 
         if(mAdapter.isEnabled()){
             //Turn Off Bluetooth
-            bluetoothAdapter.disable();
+            mAdapter.disable();
 
             //Wait turn Off Bluetooth
             while(mAdapter.isEnabled()){
@@ -138,7 +138,7 @@ public class BluetoothSerialService {
             }
 
             //Turn On Bluetooth
-            bluetoothAdapter.enable();
+            mAdapter.enable();
 
             //Wait turn On Bluetooth
             while(!mAdapter.isEnabled()){
