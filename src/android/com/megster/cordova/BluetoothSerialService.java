@@ -302,6 +302,7 @@ public class BluetoothSerialService {
         bundle.putString(BluetoothSerial.TOAST, "Device connection was lost");
         msg.setData(bundle);
         mHandler.sendMessage(msg);
+        mIsDisableBluetooth = true;
 
         // Start the service over to restart listening mode
         BluetoothSerialService.this.start();
@@ -526,6 +527,7 @@ public class BluetoothSerialService {
                     Log.e(TAG, "disconnected", e);
                     connectionLost();
                     // Start the service over to restart listening mode
+                    mIsDisableBluetooth = true;
                     BluetoothSerialService.this.start();
                     break;
                 }
